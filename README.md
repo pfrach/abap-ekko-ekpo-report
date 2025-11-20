@@ -1,7 +1,7 @@
 ##ABAP Purchase Order Viewer (EKKO/EKPO) - SALV Report##
 
-This ABAP report displays purchasing document data from **EKKO** and **EKPO** tables with user-defined selection criteria.
-The output is rendered using **CL_SALV_TABLE**, providing a clean, ALV-style table.
+This ABAP report displays purchasing document data from EKKO and EKPO tables with user-defined selection criteria.
+The output is rendered using CL_SALV_TABLE, providing a clean, ALV-style table.
 
 #Features:
 
@@ -12,7 +12,8 @@ The output is rendered using **CL_SALV_TABLE**, providing a clean, ALV-style tab
   * Company Code (BUKRS)
   * Material Number (MATNR)
 
-* Reads and combines data from **EKKO** and **EKPO**
+* Reads and combines data from EKKO and EKPO
+  
 * Displays:
 
   * PO header and item data
