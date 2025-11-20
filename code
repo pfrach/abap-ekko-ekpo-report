@@ -1,0 +1,52 @@
+*&---------------------------------------------------------------------*
+*& Report ZMM_PO_DATA
+*&-----------------------------------------------------------------------------*
+*& ABAP report displaying purchase orders from EKKO and EKPO tables            |
+*& with the ability to filter by purchase order number, date, company,         |
+*& and material. The results are presented in SALV table.                      |
+*&-----------------------------------------------------------------------------*
+REPORT zmm_po_data.
+
+TYPES: BEGIN OF t_orders,
+         ebeln TYPE ekko-ebeln,
+         bukrs TYPE ekko-bukrs,
+         bedat TYPE ekko-bedat,
+         ebelp TYPE ekpo-ebelp,
+         matnr TYPE ekpo-matnr,
+         txz01 TYPE ekpo-txz01,
+         werks TYPE ekpo-werks,
+         menge TYPE ekpo-menge,
+         meins TYPE ekpo-meins,
+         bprme TYPE ekpo-bprme,
+         netpr TYPE ekpo-netpr,
+         brtwr TYPE ekpo-brtwr.
+TYPES: END OF t_orders.
+
+DATA: ls_orders TYPE t_orders,
+      lt_orders TYPE STANDARD TABLE OF t_orders.
+
+
+SELECT-OPTIONS: so_ebeln FOR ls_orders-ebeln,
+                so_bedat FOR ls_orders-bedat,
+                so_bukrs FOR ls_orders-bukrs,
+                so_matnr FOR ls_orders-matnr.
+
+
+SELECT * FROM ekko
+  INNER JOIN ekpo
+  ON ekko~ebeln = ekpo~ebeln
+ INTO CORRESPONDING FIELDS OF TABLE @lt_orders UP TO 50 ROWS
+  WHERE ekko~ebeln IN @so_ebeln
+  AND ekko~bukrs IN @so_bukrs
+  AND ekko~bedat IN @so_bedat
+  AND ekpo~matnr IN @so_matnr.
+
+
+cl_salv_table=>factory(
+  IMPORTING
+    r_salv_table   =   DATA(lr_salv_table)
+  CHANGING
+    t_table        = lt_orders
+).
+
+lr_salv_table->display( ).
